@@ -1,0 +1,80 @@
+import matplotlib.pyplot as plt
+
+# Function to create the visual representation of the LED brightness using a '+' sign
+def plot_brightness(brightness):
+    fig, ax = plt.subplots(figsize=(0.02, 0.02))  # Adjust the figure size for better presentation
+    
+    ax.set_ylim(0, 5)  # Set the range for Y-axis (brightness)
+    ax.set_xlim(0, 5)  # X-range for positioning the plus sign
+    
+    # Clear previous elements to avoid overlapping
+    ax.clear()
+
+    # Scale the size of the '+' symbol based on the brightness
+    font_size = brightness * 0.6  # Scale font size (higher brightness, larger the +)
+    
+    ax.text(0, 50, f'{"+" * 10}', fontsize=font_size, ha='center', va='center', color='green')  # Create a large + sign
+    
+    ax.set_ylabel('Brightness (%)')
+    ax.set_title('LED Brightness Control')
+    
+    # Hide axes for a cleaner display
+    ax.axis('off')
+
+    plt.draw()  # Update the plot
+    plt.pause(0.1)  # Pause briefly to update the visual
+
+# Main LED brightness control loop
+def led_brightness_control():
+    # Initial brightness setup
+    brightness = 20  # Default starting brightness (20%)
+    min_brightness = 0  # Minimum brightness
+    max_brightness = 100  # Maximum brightness
+    step_size = 10  # Step size for increase/decrease
+    
+    print("Welcome to the LED Brightness Control!")
+    print(f"Initial brightness: {brightness}%")
+    print(f"Brightness range: {min_brightness}% to {max_brightness}%")
+    
+    # Initialize the plot (show the initial brightness)
+    plt.ion()  # Turn on interactive mode
+    plot_brightness(brightness)  # Initial visual display
+    
+    while True:
+        # Show current brightness level
+        print(f"\nCurrent Brightness: {brightness}%")
+        print("Enter command:")
+        print(" - '+' to increase brightness")
+        print(" - '-' to decrease brightness")
+        print(" - 'exit' to exit the program")
+        
+        # Get user command
+        command = input("Command: ").lower().strip()
+        
+        # Process the command
+        if command == '+':
+            if brightness + step_size <= max_brightness:
+                brightness += step_size
+                print(f"Brightness increased to {brightness}%")
+                plot_brightness(brightness)  # Update visual after change
+            else:
+                print(f"Cannot increase. Brightness is already at maximum ({max_brightness}%)")
+        
+        elif command == '-':
+            if brightness - step_size >= min_brightness:
+                brightness -= step_size
+                print(f"Brightness decreased to {brightness}%")
+                plot_brightness(brightness)  # Update visual after change
+            else:
+                print(f"Cannot decrease. Brightness is already at minimum ({min_brightness}%)")
+        
+        elif command == 'exit':
+            print("Program Ended...")
+            plt.close()  # Close the plot when exiting the program
+            break
+        
+        else:
+            print("Invalid command...\nPlease enter '+' to increase, '-' to decrease, or 'exit' to quit.")
+
+# Start the LED brightness control loop
+led_brightness_control()
